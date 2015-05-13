@@ -1,11 +1,8 @@
 {-# LANGUAGE Rank2Types #-}
 module System.Directory.Machine where
 
-import Control.Applicative ((<$>))
-import Control.Monad (join, filterM)
-import Control.Monad.IO.Class (liftIO)
+import Control.Monad (filterM)
 import Data.Machine
-import Data.Traversable (traverse)
 import System.Directory
 import System.FilePath ((</>))
 import System.IO.Machine
