@@ -1,6 +1,7 @@
 {-# LANGUAGE Rank2Types #-}
 module System.Directory.Machine where
 
+import Control.Applicative ((<$>))
 import Control.Monad (filterM)
 import Data.Machine
 import System.Directory
