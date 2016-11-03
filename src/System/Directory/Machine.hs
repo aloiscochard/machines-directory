@@ -13,6 +13,10 @@ import System.IO.Machine
 
 import System.Directory.Machine.Internal
 
+-- | Recursively (breadth-first) walk thru the directory structure.
+--
+-- >>> runT (files <~ directoryWalk <~ source ["."])
+-- ["./.gitignore",...
 directoryWalk :: ProcessT IO FilePath FilePath
 directoryWalk = MachineT . return $ Await (\root -> f [root] []) Refl stopped where
   f []    []      = directoryWalk
