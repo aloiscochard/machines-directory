@@ -26,6 +26,8 @@ directoryWalk = directoryWalk' (const True)
 -- @
 -- directoryWalk' (not . isSuffixOf ".git")
 -- @
+--
+-- @since 0.2.1.0
 directoryWalk' :: (FilePath -> Bool) -> ProcessT IO FilePath FilePath
 directoryWalk' p = MachineT . return $ Await (\root -> f [root] []) Refl stopped where
   f []     []      = directoryWalk
