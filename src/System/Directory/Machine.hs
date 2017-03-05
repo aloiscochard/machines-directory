@@ -13,14 +13,29 @@ import System.IO.Machine
 
 import System.Directory.Machine.Internal
 
+-- | Recursively (breadth-first) walk thru the directory structure.
+--
+-- >>> runT (files <~ directoryWalk <~ source ["."])
+-- ["./.gitignore",...
 directoryWalk :: ProcessT IO FilePath FilePath
-directoryWalk = MachineT . return $ Await (\root -> f [root] []) Refl stopped where
-  f []    []      = directoryWalk
-  f xs    (y:ys)  = MachineT . return $ Yield y $ f xs ys
+directoryWalk = directoryWalk' (const True)
+
+-- | A variant of 'directoryWalk' with a predicate whether to descend
+-- into particular directory.
+--
+-- @
+-- directoryWalk' (not . isSuffixOf ".git")
+-- @
+--
+-- @since 0.2.1.0
+directoryWalk' :: (FilePath -> Bool) -> ProcessT IO FilePath FilePath
+directoryWalk' p = MachineT . return $ Await (\root -> f [root] []) Refl stopped where
+  f []     []      = directoryWalk
+  f xs     (y:ys)  = MachineT . return $ Yield y $ f xs ys
   f (x:xs) []      = MachineT $ do
     ys <- getDirectoryContents x
     let contents = (x </>) <$> (filter isDirectoryContentsValid $ ys)
-    dirs <- filterM doesDirectoryExist contents
+    dirs <- filterM doesDirectoryExist (filter p contents)
     runMachineT $ f (dirs ++ xs) contents
 
 directoryContents :: ProcessT IO FilePath [FilePath]
