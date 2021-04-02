@@ -1,5 +1,5 @@
 name:                machines-directory
-version:             0.2.1.2
+version:             7.0.0.0
 synopsis:            Directory (system) utilities for the machines library
 homepage:            http://github.com/aloiscochard/machines-directory
 license:             Apache-2.0
